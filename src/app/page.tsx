@@ -29,7 +29,7 @@ export default function Home() {
               <p className="mt-8 text-lg lg:pr-10 max-w-prose text-center lg:text-left text-balance md:text-wrap">
                 Capture your favorite memories with your own,{" "}
                 <span className="font-semibold ">one-of-one</span> phone case.
-                NavasCase allows you to protect your memories, not just your
+                CaseNavas allows you to protect your memories, not just your
                 phone case.
               </p>
               <ul className="mt-8 space-y-2 text-left font-medium flex flex-col items-center sm:items-start">
@@ -97,16 +97,16 @@ export default function Home() {
             <div className="relative md:max-w-xl">
               <Image
                 src="/your-image.png"
-                className="absolute w-40 lg:w-52 left-56 -top-20 select-none hidden sm:block lg:hidden xl:block"
+                className="absolute w-40 lg:w-52  left-64 -top-20 select-none hidden sm:block lg:hidden xl:block"
                 width={100}
                 height={100}
                 alt="phone check"
               />
               <Image
                 src="/line.png"
-                className="absolute -left-6 bottom-6 select-none"
-                width={40}
-                height={40}
+                className="absolute -left-6 -bottom-8 select-none"
+                width={100}
+                height={100}
                 alt="phone"
               />
               <Phone className=" " imgSrc="/testimonials/1.jpg" />
