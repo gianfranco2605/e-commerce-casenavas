@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import Image from "next/image";
 import { useInView } from "framer-motion";
@@ -44,20 +44,39 @@ function ReviewColumns({
 }: ReviewsInter) {
   const columnRef = useRef<HTMLDivElement | null>(null);
   const [columnsHeight, setColumnsHeight] = useState(0);
+  const duration = `${columnsHeight * msPerPixel}ms`;
 
   useEffect(() => {
-    if (!columnRef.current) {
-      const resizeObserver = new window.ResizeObserver(() => {
-        setColumnsHeight(columnRef.current?.offsetHeight ?? 0);
-      });
-    }
+    if (!columnRef.current) return;
+    const resizeObserver = new window.ResizeObserver(() => {
+      setColumnsHeight(columnRef.current?.offsetHeight ?? 0);
+    });
+    resizeObserver.observe(columnRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
   return (
     <div
       ref={columnRef}
       className={cn("animate-marquee space-y-8 py-4", className)}
       style={{ "--marquee-duration": duration } as React.CSSProperties}
-    ></div>
+    >
+      {reviews.concat(reviews).map((imgSrc, reviewIndex) => (
+        <Review />
+      ))}
+    </div>
+  );
+}
+
+interface ReviewProps extends HTMLAttributes<HTMLDivElement> {
+  imgSrc: string;
+}
+
+function Review({ imgSrc, className, ...props }: ReviewProps) {
+  return (
+    <div className={cn("animate-fade-in rounded-[2.25rem]")} {...props}></div>
   );
 }
 
