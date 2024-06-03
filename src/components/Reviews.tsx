@@ -4,6 +4,7 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import Image from "next/image";
 import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Phone from "./Phone";
 
 const PHONES = [
   "/testimonials/1.jpg",
@@ -64,7 +65,11 @@ function ReviewColumns({
       style={{ "--marquee-duration": duration } as React.CSSProperties}
     >
       {reviews.concat(reviews).map((imgSrc, reviewIndex) => (
-        <Review />
+        <Review
+          key={reviewIndex}
+          className={reviewClassname?.(reviewIndex % reviews.length)}
+          imgSrc={imgSrc}
+        />
       ))}
     </div>
   );
@@ -75,8 +80,30 @@ interface ReviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 function Review({ imgSrc, className, ...props }: ReviewProps) {
+  const POSSIBLE_ANIMATION_DELAYS = [
+    "0s",
+    "0.1s",
+    "0.2s",
+    "0.3s",
+    "0.4s",
+    "0.5s",
+  ];
+
+  const animationsDelay =
+    POSSIBLE_ANIMATION_DELAYS[
+      Math.floor(Math.random() * POSSIBLE_ANIMATION_DELAYS.length)
+    ];
   return (
-    <div className={cn("animate-fade-in rounded-[2.25rem]")} {...props}></div>
+    <div
+      className={cn(
+        "animate-fade-in rounded-[2.25rem] bg-white p-6 opacity-0 shadow-xl shadow-slate-900/5",
+        className
+      )}
+      style={{ animationsDelay }}
+      {...props}
+    >
+      <Phone imgSrc={imgSrc} />
+    </div>
   );
 }
 
@@ -84,9 +111,9 @@ function ReviewGrid() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
   const columns = splitArray(PHONES, 3);
-  const columns1 = columns[0];
-  const columns2 = columns[1];
-  const columns3 = splitArray(columns[0], 2);
+  const column1 = columns[0];
+  const column2 = columns[1];
+  const column3 = splitArray(columns[0], 2);
 
   return (
     <div
@@ -95,9 +122,33 @@ function ReviewGrid() {
     >
       {isInView ? (
         <>
-          <ReviewColumns />
+          <ReviewColumns
+            reviews={[...column1, ...column3.flat(), ...column2]}
+            reviewClassname={(reviewIndex) =>
+              cn({
+                "md-hidden": reviewIndex >= column1.length + column3[0].length,
+                "lg:hidden": reviewIndex >= column1.length,
+              })
+            }
+            msPerPixel={10}
+          />
+          <ReviewColumns
+            reviews={[...column2, ...column3[1]]}
+            className="nidden md:block"
+            reviewClassname={(reviewIndex) =>
+              reviewIndex >= column2.length ? "lg:hidden" : ""
+            }
+            msPerPixel={15}
+          />
+          <ReviewColumns
+            reviews={column3.flat()}
+            className="nidden md:block"
+            msPerPixel={10}
+          />
         </>
       ) : null}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-slate-100" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-100" />
     </div>
   );
 }
@@ -108,8 +159,8 @@ const Reviews = () => {
       <Image
         src="/what-people-are-buying.png"
         className="absolute select-none hidden xl:block -left-32 top-1/3"
-        width={50}
-        height={50}
+        width={200}
+        height={200}
         alt="people"
       />
 
