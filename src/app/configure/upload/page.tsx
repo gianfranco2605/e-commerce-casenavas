@@ -1,14 +1,20 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { Divide, Image, Loader2, MousePointerSquareDashed } from "lucide-react";
+import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
 
 const Page = () => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const onDropRejected = () => {};
-  const onDropAccepted = () => {};
+  const onDropAccepted = () => {
+    console.log("hello");
+  };
+
+  const isUpLoading = false;
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div
@@ -26,7 +32,38 @@ const Page = () => {
             "image/jpeg": [".jpeg"],
             "image/jpg": [".jpg"],
           }}
-        ></Dropzone>
+          onDragEnter={() => setIsDragOver(true)}
+          onDragLeave={() => setIsDragOver(false)}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <div
+              className="w-full h-full flex-1 flex flex-col items-center justify-center"
+              {...getRootProps()}
+            >
+              <input {...getInputProps()} />
+              {isDragOver ? (
+                <MousePointerSquareDashed className="h-6 w-6 text-zinc-500 mb-2" />
+              ) : isUpLoading || isPending ? (
+                <Loader2 className="animate-spin h-6 w-6 text-zinc-500 mb-2" />
+              ) : (
+                <Image className="h-6 w-6 text-zinc-500 mb-2" />
+              )}
+              <div className="flex flex-col justify-normal mb-2 text-sm text-zinc-700">
+                {isUpLoading ? (
+                  <div className="flex flex-col items-center">
+                    <p>Uploading...</p>
+                  </div>
+                ) : isPending ? (
+                  <div></div>
+                ) : isDragOver ? (
+                  <span></span>
+                ) : (
+                  <span></span>
+                )}
+              </div>
+            </div>
+          )}
+        </Dropzone>
       </div>
     </div>
   );
