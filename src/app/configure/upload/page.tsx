@@ -69,7 +69,7 @@ const Page = () => {
         >
           {({ getRootProps, getInputProps }) => (
             <div
-              className="w-full h-full flex-1 flex flex-col items-center justify-center"
+              className="w-full h-full flex-1 flex flex-col items-center cursor-pointer justify-center"
               {...getRootProps()}
             >
               <input {...getInputProps()} />
@@ -80,7 +80,7 @@ const Page = () => {
               ) : (
                 <Image className="h-6 w-6 text-zinc-500 mb-2" />
               )}
-              <div className="flex flex-col justify-normal mb-2 text-sm text-zinc-700">
+              <div className="flex flex-col justify-normal cursor-pointer mb-2 text-sm text-zinc-700">
                 {isUploading ? (
                   <div className="flex flex-col items-center">
                     <p>Uploading...</p>
