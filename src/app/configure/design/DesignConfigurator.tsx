@@ -9,6 +9,12 @@ import { Radio, RadioGroup } from "@headlessui/react";
 import { useState } from "react";
 import { COLORS } from "@/validators/option-validator";
 import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MODELS } from "@/validators/option-validator";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -21,8 +27,12 @@ const DesignConfigurator = ({
   imageUrl,
   ImageDimention,
 }: DesignConfiguratorProps) => {
-  const [options, setOptions] = useState<{ color: (typeof COLORS)[number] }>({
+  const [options, setOptions] = useState<{
+    color: (typeof COLORS)[number];
+    model: (typeof MODELS.options)[number];
+  }>({
     color: COLORS[0],
+    model: MODELS.options[0],
   });
   return (
     <div className="relative mt-20 grid grid-cols-1 lg:grid-cols-3 mb-20 pb-20">
@@ -121,7 +131,20 @@ const DesignConfigurator = ({
                     ))}
                   </div>
                 </RadioGroup>
-                <div className="relative flex flex-col gap-3">Model</div>
+                <div className="relative flex flex-col gap-3">
+                  <label>Model</label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="w-full justify-between"
+                        role="combobox"
+                        variant="outline"
+                      >
+                        {options.model.label}
+                      </Button>
+                    </DropdownMenuTrigger>
+                  </DropdownMenu>
+                </div>
               </div>
             </div>
           </div>
