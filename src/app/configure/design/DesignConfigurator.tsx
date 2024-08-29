@@ -11,10 +11,13 @@ import { COLORS } from "@/validators/option-validator";
 import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MODELS } from "@/validators/option-validator";
+import { ChevronsUpDown } from "lucide-react";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -141,8 +144,25 @@ const DesignConfigurator = ({
                         variant="outline"
                       >
                         {options.model.label}
+                        <ChevronsUpDown className="ml-2 h4 w-4 h-4 shrink-0 opacity-50" />
                       </Button>
                     </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {MODELS.options.map((model) => (
+                        <DropdownMenuItem
+                          key={model.label}
+                          className={cn(
+                            "flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100",
+                            {
+                              "bg-zinc-100":
+                                model.label === options.model.label,
+                            }
+                          )}
+                        >
+                          {model.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
               </div>
